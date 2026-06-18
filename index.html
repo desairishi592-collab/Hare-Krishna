@@ -1,111 +1,225 @@
-<!DOCTYPE html>
+python3 << 'PYEOF'
+import sys
+sys.path.insert(0, '/tmp')
+from shared_parts import LOGO_SRC
+
+html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hare Krishna Gift Shop — ISKCON Naperville</title>
-  
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    --saffron: #C8570A; --saffron-light: #F4A94A; --gold: #B8860B;
-    --gold-pale: #F5E9C8; --cream: #FBF6EC; --earth: #3B2A14;
-    --earth-mid: #6B4C2A; --text: #2C1E0F; --text-muted: #7A6040;
-    --border: #E2CFA0; --white: #FFFFFF; --nav-h: 72px;
-    --font-serif: 'Cormorant Garamond', Georgia, serif;
-    --font-sans: 'Jost', sans-serif;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: var(--font-sans); font-weight: 300; background: var(--cream); color: var(--text); line-height: 1.7; }
-  img { max-width: 100%; display: block; }
-  a { text-decoration: none; color: inherit; }
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h); background: var(--earth); display: flex; align-items: center; border-bottom: 2px solid var(--saffron-light); }
-  .nav-inner { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
-  .nav-logo { display: flex; align-items: center; gap: 12px; }
-  .nav-logo img { height: 44px; width: auto; filter: brightness(0) invert(1); }
-  .nav-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 300; color: var(--gold-pale); letter-spacing: .04em; line-height: 1.25; }
-  .nav-title span { display: block; font-size: .7rem; font-family: var(--font-sans); letter-spacing: .15em; text-transform: uppercase; color: var(--saffron-light); font-weight: 400; }
-  .nav-links { display: flex; align-items: center; gap: 22px; list-style: none; }
-  .nav-links a { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-pale); font-weight: 400; transition: color .2s; }
-  .nav-links a:hover { color: var(--saffron-light); }
-  .nav-donate-btn { background: var(--saffron); color: var(--white) !important; padding: 8px 16px; border-radius: 2px; }
-  .nav-donate-btn:hover { background: var(--saffron-light) !important; color: var(--earth) !important; }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-  .hamburger span { width: 24px; height: 1.5px; background: var(--gold-pale); display: block; }
-  .mobile-menu { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 99; background: var(--earth); padding: 20px 24px 28px; border-bottom: 2px solid var(--saffron); }
-  .mobile-menu.open { display: block; }
-  .mobile-menu a { display: block; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.08); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-pale); }
-  .mobile-menu a:last-child { border-bottom: none; }
-  .page-body { margin-top: var(--nav-h); }
-  .section-eyebrow { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--saffron); font-weight: 500; margin-bottom: 12px; }
-  .section-title { font-family: var(--font-serif); font-size: clamp(2rem,4vw,3rem); font-weight: 300; color: var(--earth); line-height: 1.2; margin-bottom: 16px; }
-  .section-lead { font-size: .95rem; color: var(--text-muted); max-width: 560px; line-height: 1.8; }
-  .divider { width: 48px; height: 1px; background: var(--gold); margin: 24px 0; }
-  .btn-primary { background: var(--saffron); color: var(--white); padding: 14px 32px; font-family: var(--font-sans); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; border: none; cursor: pointer; border-radius: 2px; transition: background .2s, transform .15s; display: inline-block; }
-  .btn-primary:hover { background: var(--saffron-light); color: var(--earth); transform: translateY(-1px); }
-  .btn-outline { border: 1px solid var(--border); color: var(--earth-mid); padding: 14px 32px; font-family: var(--font-sans); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 400; border-radius: 2px; background: transparent; cursor: pointer; display: inline-block; transition: border-color .2s, color .2s; }
-  .btn-outline:hover { border-color: var(--saffron); color: var(--saffron); }
-  footer { background: #1e1208; padding: 36px 0; border-top: 1px solid rgba(245,233,200,.08); }
-  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
-  .footer-logo { display: flex; align-items: center; gap: 10px; }
-  .footer-logo img { height: 32px; filter: brightness(0) invert(1); opacity: .5; }
-  .footer-logo span { font-family: var(--font-serif); font-size: 1rem; font-style: italic; color: rgba(245,233,200,.35); }
-  .footer-copy { font-size: .75rem; color: rgba(245,233,200,.3); line-height: 1.6; }
-  .footer-copy a { color: var(--saffron-light); opacity: .7; }
-  .footer-links { display: flex; gap: 20px; list-style: none; }
-  .footer-links a { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(245,233,200,.35); transition: color .2s; }
-  .footer-links a:hover { color: var(--saffron-light); }
-  @media (max-width: 768px) { .nav-links { display: none; } .hamburger { display: flex; } .footer-inner { flex-direction: column; text-align: center; } }
-</style>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    .hero { min-height: 90vh; background: var(--earth); display: grid; place-items: center; text-align: center; padding: 80px 24px 60px; position: relative; overflow: hidden; }
-    .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 60%, rgba(200,87,10,.18) 0%, transparent 70%); pointer-events:none; }
-    .hero-ring { position:absolute; border-radius:50%; border:1px solid rgba(184,134,11,.08); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
-    .hero-content { position:relative; z-index:1; max-width:700px; }
-    .hero-logo { width:100px; margin:0 auto 32px; filter:brightness(0) invert(1); opacity:.9; }
-    .hero-eyebrow { font-size:.72rem; letter-spacing:.25em; text-transform:uppercase; color:var(--saffron-light); font-weight:400; margin-bottom:18px; }
-    .hero h1 { font-family:var(--font-serif); font-size:clamp(2.6rem,6vw,4.2rem); font-weight:300; color:var(--gold-pale); line-height:1.15; margin-bottom:22px; }
-    .hero h1 em { font-style:italic; color:var(--saffron-light); }
-    .hero-sub { font-size:.95rem; color:rgba(245,233,200,.7); max-width:480px; margin:0 auto 42px; font-weight:300; line-height:1.8; }
-    .hero-ctas { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-    .hero .btn-outline { border-color:rgba(245,233,200,.4); color:var(--gold-pale); }
-    .marquee-band { background:var(--saffron); padding:11px 0; overflow:hidden; white-space:nowrap; }
-    .marquee-track { display:inline-flex; animation:marquee 28s linear infinite; }
-    .marquee-track span { font-family:var(--font-serif); font-size:1rem; font-weight:300; font-style:italic; color:var(--white); padding:0 36px; opacity:.9; }
-    .marquee-track span.dot { font-style:normal; padding:0; opacity:.5; font-size:.5rem; display:inline-flex; align-items:center; }
-    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .features { background:var(--white); padding:80px 0; }
-    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:40px; margin-top:52px; }
-    .feature { text-align:center; }
-    .feature-icon { width:64px; height:64px; border-radius:50%; background:var(--gold-pale); border:1px solid var(--border); margin:0 auto 20px; display:grid; place-items:center; font-size:1.6rem; }
-    .feature h4 { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; color:var(--earth); margin-bottom:8px; }
-    .feature p { font-size:.85rem; color:var(--text-muted); line-height:1.7; }
+    :root {{
+      --saffron:#C8570A; --saffron-light:#F4A94A; --gold:#B8860B;
+      --gold-pale:#F5E9C8; --cream:#FBF6EC; --earth:#3B2A14;
+      --earth-mid:#6B4C2A; --text:#2C1E0F; --text-muted:#7A6040;
+      --border:#E2CFA0; --white:#FFFFFF; --nav-h:72px;
+      --font-serif:'Cormorant Garamond',Georgia,serif;
+      --font-sans:'Jost',sans-serif;
+    }}
+    *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0;}}
+    html{{scroll-behavior:smooth;}}
+    body{{font-family:var(--font-sans);font-weight:300;background:var(--cream);color:var(--text);line-height:1.7;}}
+    img{{max-width:100%;display:block;}}
+    a{{text-decoration:none;color:inherit;cursor:pointer;}}
+
+    /* NAV */
+    nav{{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--earth);display:flex;align-items:center;border-bottom:2px solid var(--saffron-light);}}
+    .nav-inner{{width:100%;max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}}
+    .nav-logo{{display:flex;align-items:center;gap:12px;cursor:pointer;}}
+    .nav-logo img{{height:44px;width:auto;filter:brightness(0) invert(1);}}
+    .nav-title{{font-family:var(--font-serif);font-size:1.1rem;font-weight:300;color:var(--gold-pale);letter-spacing:.04em;line-height:1.25;}}
+    .nav-title span{{display:block;font-size:.7rem;font-family:var(--font-sans);letter-spacing:.15em;text-transform:uppercase;color:var(--saffron-light);font-weight:400;}}
+    .nav-links{{display:flex;align-items:center;gap:22px;list-style:none;}}
+    .nav-links a{{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);font-weight:400;transition:color .2s;}}
+    .nav-links a:hover{{color:var(--saffron-light);}}
+    .nav-links a.active{{color:var(--saffron-light);border-bottom:1px solid var(--saffron-light);padding-bottom:2px;}}
+    .nav-donate-btn{{background:var(--saffron);color:var(--white)!important;padding:8px 16px;border-radius:2px;}}
+    .nav-donate-btn:hover{{background:var(--saffron-light)!important;color:var(--earth)!important;}}
+    .hamburger{{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}}
+    .hamburger span{{width:24px;height:1.5px;background:var(--gold-pale);display:block;}}
+    .mobile-menu{{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;background:var(--earth);padding:20px 24px 28px;border-bottom:2px solid var(--saffron);}}
+    .mobile-menu.open{{display:block;}}
+    .mobile-menu a{{display:block;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-pale);}}
+    .mobile-menu a:last-child{{border-bottom:none;}}
+
+    /* PAGES */
+    .page{{display:none;margin-top:var(--nav-h);}}
+    .page.active{{display:block;}}
+
+    /* SHARED */
+    .container{{max-width:1100px;margin:0 auto;padding:0 24px;}}
+    .section-eyebrow{{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--saffron);font-weight:500;margin-bottom:12px;}}
+    .section-title{{font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);font-weight:300;color:var(--earth);line-height:1.2;margin-bottom:16px;}}
+    .section-lead{{font-size:.95rem;color:var(--text-muted);max-width:560px;line-height:1.8;}}
+    .divider{{width:48px;height:1px;background:var(--gold);margin:24px 0;}}
+    .btn-primary{{background:var(--saffron);color:var(--white);padding:14px 32px;font-family:var(--font-sans);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;border:none;cursor:pointer;border-radius:2px;transition:background .2s,transform .15s;display:inline-block;}}
+    .btn-primary:hover{{background:var(--saffron-light);color:var(--earth);transform:translateY(-1px);}}
+    .btn-outline{{border:1px solid rgba(245,233,200,.4);color:var(--gold-pale);padding:14px 32px;font-family:var(--font-sans);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:400;border-radius:2px;background:transparent;cursor:pointer;display:inline-block;transition:border-color .2s,color .2s;}}
+    .btn-outline:hover{{border-color:var(--saffron-light);color:var(--saffron-light);}}
+    .page-hero{{background:var(--earth);padding:60px 0 48px;text-align:center;}}
+    .page-hero .section-title{{color:var(--gold-pale);}}
+    .page-hero .section-eyebrow{{color:var(--saffron-light);}}
+
+    /* HOME */
+    .hero{{min-height:90vh;background:var(--earth);display:grid;place-items:center;text-align:center;padding:80px 24px 60px;position:relative;overflow:hidden;}}
+    .hero::before{{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(200,87,10,.18) 0%,transparent 70%);pointer-events:none;}}
+    .hero-ring{{position:absolute;border-radius:50%;border:1px solid rgba(184,134,11,.08);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}}
+    .hero-content{{position:relative;z-index:1;max-width:700px;}}
+    .hero-logo{{width:100px;margin:0 auto 32px;filter:brightness(0) invert(1);opacity:.9;}}
+    .hero-eyebrow{{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--saffron-light);font-weight:400;margin-bottom:18px;}}
+    .hero h1{{font-family:var(--font-serif);font-size:clamp(2.6rem,6vw,4.2rem);font-weight:300;color:var(--gold-pale);line-height:1.15;margin-bottom:22px;}}
+    .hero h1 em{{font-style:italic;color:var(--saffron-light);}}
+    .hero-sub{{font-size:.95rem;color:rgba(245,233,200,.7);max-width:480px;margin:0 auto 42px;font-weight:300;line-height:1.8;}}
+    .hero-ctas{{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}}
+    .marquee-band{{background:var(--saffron);padding:11px 0;overflow:hidden;white-space:nowrap;}}
+    .marquee-track{{display:inline-flex;animation:marquee 28s linear infinite;}}
+    .marquee-track span{{font-family:var(--font-serif);font-size:1rem;font-weight:300;font-style:italic;color:var(--white);padding:0 36px;opacity:.9;}}
+    .marquee-track span.dot{{font-style:normal;padding:0;opacity:.5;font-size:.5rem;display:inline-flex;align-items:center;}}
+    @keyframes marquee{{from{{transform:translateX(0)}}to{{transform:translateX(-50%)}}}}
+    .features{{background:var(--white);padding:80px 0;}}
+    .features-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;margin-top:52px;}}
+    .feature{{text-align:center;}}
+    .feature-icon{{width:64px;height:64px;border-radius:50%;background:var(--gold-pale);border:1px solid var(--border);margin:0 auto 20px;display:grid;place-items:center;font-size:1.6rem;}}
+    .feature h4{{font-family:var(--font-serif);font-size:1.1rem;font-weight:400;color:var(--earth);margin-bottom:8px;}}
+    .feature p{{font-size:.85rem;color:var(--text-muted);line-height:1.7;}}
+
+    /* SHOP */
+    .shop-hero{{background:var(--earth);padding:60px 0 48px;text-align:center;}}
+    .shop-hero .section-lead{{color:rgba(245,233,200,.65);margin:0 auto;}}
+    .shop-section{{padding:60px 0 90px;}}
+    .filter-row{{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px;}}
+    .filter-btn{{font-family:var(--font-sans);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);background:var(--white);color:var(--text-muted);padding:8px 16px;border-radius:2px;cursor:pointer;font-weight:400;transition:all .2s;}}
+    .filter-btn.active,.filter-btn:hover{{border-color:var(--saffron);color:var(--saffron);background:rgba(200,87,10,.04);}}
+    .shop-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px;}}
+    .product-card{{background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:pointer;}}
+    .product-card:hover{{transform:translateY(-3px);box-shadow:0 12px 36px rgba(59,42,20,.1);}}
+    .product-img{{aspect-ratio:1;background:var(--gold-pale);display:grid;place-items:center;font-size:3rem;color:var(--saffron);position:relative;}}
+    .product-badge{{position:absolute;top:12px;left:12px;background:var(--saffron);color:var(--white);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:1px;font-family:var(--font-sans);font-weight:500;}}
+    .product-info{{padding:18px 20px 22px;}}
+    .product-category{{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;}}
+    .product-name{{font-family:var(--font-serif);font-size:1.15rem;font-weight:400;color:var(--earth);margin-bottom:6px;line-height:1.3;}}
+    .product-desc{{font-size:.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px;}}
+    .product-footer{{display:flex;align-items:center;justify-content:space-between;}}
+    .product-donation{{font-family:var(--font-serif);font-size:1rem;color:var(--earth-mid);}}
+    .product-donation em{{font-style:normal;font-size:.7rem;letter-spacing:.08em;color:var(--text-muted);display:block;font-family:var(--font-sans);}}
+    .donate-btn{{background:transparent;border:1px solid var(--saffron);color:var(--saffron);font-family:var(--font-sans);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:2px;cursor:pointer;font-weight:500;transition:all .2s;}}
+    .donate-btn:hover{{background:var(--saffron);color:var(--white);}}
+    .shop-note{{margin-top:40px;background:var(--gold-pale);border:1px solid var(--border);border-left:3px solid var(--saffron-light);border-radius:2px;padding:20px 24px;font-size:.85rem;color:var(--earth-mid);line-height:1.7;}}
+
+    /* MODAL */
+    .modal-overlay{{display:none;position:fixed;inset:0;z-index:200;background:rgba(44,30,15,.6);backdrop-filter:blur(4px);place-items:center;}}
+    .modal-overlay.open{{display:grid;}}
+    .modal{{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:40px;max-width:460px;width:calc(100% - 40px);position:relative;}}
+    .modal-close{{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--text-muted);line-height:1;}}
+    .modal h3{{font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:var(--earth);margin-bottom:6px;}}
+    .modal-item-name{{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--saffron);margin-bottom:20px;}}
+    .modal-fixed-amount{{font-family:var(--font-serif);font-size:2rem;color:var(--earth);text-align:center;padding:16px;background:var(--gold-pale);border:1px solid var(--border);border-radius:2px;margin-bottom:8px;}}
+    .modal-amount-label{{font-size:.75rem;text-align:center;color:var(--text-muted);margin-bottom:20px;letter-spacing:.08em;}}
+    .modal-paypal-btn{{width:100%;background:#003087;color:var(--white);border:none;border-radius:4px;padding:14px;font-size:.95rem;font-weight:500;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:10px;}}
+    .modal-paypal-btn:hover{{background:#001f5c;}}
+    .modal-disclaimer{{margin-top:16px;font-size:.75rem;color:var(--text-muted);text-align:center;line-height:1.6;}}
+
+    /* ABOUT */
+    .about-section{{padding:80px 0;background:var(--white);}}
+    .about-grid{{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}}
+    .about-img-frame{{background:var(--gold-pale);border:1px solid var(--border);border-radius:2px;aspect-ratio:4/5;display:grid;place-items:center;font-size:5rem;}}
+    .about-quote{{margin-top:28px;padding-left:20px;border-left:2px solid var(--saffron-light);}}
+    .about-quote p{{font-family:var(--font-serif);font-size:1.05rem;font-style:italic;color:var(--earth-mid);line-height:1.7;}}
+    .temple-link{{display:inline-flex;align-items:center;gap:8px;margin-top:28px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--saffron);font-weight:500;}}
+    .temple-link::after{{content:'→';}}
+    .mission{{padding:80px 0;background:var(--cream);}}
+    .mission-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px;margin-top:48px;}}
+    .mission-card{{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:28px;}}
+    .mission-card h4{{font-family:var(--font-serif);font-size:1.1rem;color:var(--earth);margin-bottom:10px;font-weight:400;}}
+    .mission-card p{{font-size:.85rem;color:var(--text-muted);line-height:1.7;}}
+
+    /* HOW IT WORKS */
+    .how-section{{padding:80px 0;background:var(--white);}}
+    .how-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;margin-top:52px;}}
+    .how-step{{text-align:center;}}
+    .how-icon{{width:72px;height:72px;border-radius:50%;background:var(--gold-pale);border:1px solid var(--border);margin:0 auto 20px;display:grid;place-items:center;font-size:1.8rem;}}
+    .how-num{{font-size:.65rem;letter-spacing:.2em;color:var(--saffron);text-transform:uppercase;margin-bottom:8px;font-weight:500;}}
+    .how-step h4{{font-family:var(--font-serif);font-size:1.2rem;font-weight:400;color:var(--earth);margin-bottom:8px;}}
+    .how-step p{{font-size:.85rem;color:var(--text-muted);line-height:1.7;}}
+    .faq{{padding:80px 0;background:var(--cream);}}
+    .faq-list{{margin-top:48px;display:flex;flex-direction:column;gap:16px;}}
+    .faq-item{{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:24px 28px;}}
+    .faq-item h4{{font-family:var(--font-serif);font-size:1.05rem;color:var(--earth);margin-bottom:8px;font-weight:400;}}
+    .faq-item p{{font-size:.85rem;color:var(--text-muted);line-height:1.7;}}
+
+    /* CONTACT */
+    .contact-section{{padding:80px 0;}}
+    .contact-grid{{display:grid;grid-template-columns:1fr 1fr;gap:60px;}}
+    .contact-info p{{font-size:.9rem;color:var(--text-muted);line-height:1.9;margin-bottom:6px;}}
+    .contact-info strong{{color:var(--earth);font-weight:500;}}
+    .contact-info a{{color:var(--saffron);}}
+    .hours-block{{margin:24px 0;}}
+    .hours-block h4{{font-family:var(--font-serif);font-size:1rem;color:var(--earth);margin-bottom:10px;font-weight:400;}}
+    .hours-row{{display:flex;gap:12px;font-size:.85rem;color:var(--text-muted);line-height:1.7;}}
+    .hours-row strong{{min-width:90px;color:var(--earth-mid);font-weight:500;}}
+    .email-signup{{margin-top:24px;padding:16px 20px;background:var(--gold-pale);border:1px solid var(--border);border-radius:2px;font-size:.85rem;color:var(--earth-mid);line-height:1.7;}}
+    .email-signup a{{color:var(--saffron);font-weight:500;}}
+    .contact-form{{display:flex;flex-direction:column;gap:14px;}}
+    .contact-form label{{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);font-weight:400;display:block;margin-bottom:4px;}}
+    .contact-form input,.contact-form textarea{{width:100%;border:1px solid var(--border);background:var(--white);color:var(--text);font-family:var(--font-sans);font-size:.9rem;font-weight:300;padding:12px 16px;border-radius:2px;outline:none;transition:border-color .2s;}}
+    .contact-form input:focus,.contact-form textarea:focus{{border-color:var(--saffron);}}
+    .contact-form textarea{{resize:vertical;min-height:120px;}}
+    .send-btn{{background:var(--saffron);color:var(--white);border:none;border-radius:2px;padding:14px;cursor:pointer;font-family:var(--font-sans);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;transition:background .2s;}}
+    .send-btn:hover{{background:var(--saffron-light);color:var(--earth);}}
+
+    /* PRIVACY */
+    .privacy-section{{padding:80px 0;}}
+    .privacy-content{{max-width:780px;}}
+    .privacy-content h2{{font-family:var(--font-serif);font-size:1.4rem;font-weight:400;color:var(--earth);margin:36px 0 12px;}}
+    .privacy-content p{{font-size:.9rem;color:var(--text-muted);line-height:1.85;margin-bottom:14px;}}
+    .privacy-content ul{{margin:8px 0 14px 20px;}}
+    .privacy-content li{{font-size:.9rem;color:var(--text-muted);line-height:1.85;margin-bottom:6px;}}
+    .privacy-content a{{color:var(--saffron);}}
+    .privacy-content strong{{color:var(--earth);font-weight:500;}}
+    .privacy-note{{background:var(--gold-pale);border:1px solid var(--border);border-left:3px solid var(--saffron-light);border-radius:2px;padding:20px 24px;margin-bottom:32px;font-size:.85rem;color:var(--earth-mid);line-height:1.7;}}
+
+    /* FOOTER */
+    footer{{background:#1e1208;padding:36px 0;border-top:1px solid rgba(245,233,200,.08);}}
+    .footer-inner{{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}}
+    .footer-logo{{display:flex;align-items:center;gap:10px;cursor:pointer;}}
+    .footer-logo img{{height:32px;filter:brightness(0) invert(1);opacity:.5;}}
+    .footer-logo span{{font-family:var(--font-serif);font-size:1rem;font-style:italic;color:rgba(245,233,200,.35);}}
+    .footer-copy{{font-size:.75rem;color:rgba(245,233,200,.3);line-height:1.6;}}
+    .footer-copy a{{color:var(--saffron-light);opacity:.7;}}
+    .footer-links{{display:flex;gap:20px;list-style:none;}}
+    .footer-links a{{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,233,200,.35);transition:color .2s;cursor:pointer;}}
+    .footer-links a:hover{{color:var(--saffron-light);}}
+
+    @media(max-width:768px){{
+      .nav-links{{display:none;}} .hamburger{{display:flex;}}
+      .about-grid{{grid-template-columns:1fr;gap:40px;}}
+      .contact-grid{{grid-template-columns:1fr;gap:40px;}}
+      .footer-inner{{flex-direction:column;text-align:center;}}
+    }}
   </style>
 </head>
 <body>
-  
+
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <img src="data:image/jpeg;base64,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" alt="ISKCON Naperville logo" />
-      <div class="nav-title">
-        Hare Krishna Gift Shop
-        <span>ISKCON Naperville</span>
-      </div>
-    </a>
+    <div class="nav-logo" onclick="showPage('home')">
+      <img src="{LOGO_SRC}" alt="ISKCON Naperville logo" />
+      <div class="nav-title">Hare Krishna Gift Shop<span>ISKCON Naperville</span></div>
+    </div>
     <ul class="nav-links">
-      <li><a href="shop.html">Shop</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="how-it-works.html">How It Works</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="privacy-policy.html">Privacy Policy</a></li>
+      <li><a onclick="showPage('shop')" id="nav-shop">Shop</a></li>
+      <li><a onclick="showPage('about')" id="nav-about">About</a></li>
+      <li><a onclick="showPage('how')" id="nav-how">How It Works</a></li>
+      <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+      <li><a onclick="showPage('privacy')" id="nav-privacy">Privacy Policy</a></li>
       <li><a href="https://www.iskconnaperville.org" target="_blank" rel="noopener">Temple Site ↗</a></li>
-      <li><a href="shop.html" class="nav-donate-btn">Make a Donation</a></li>
+      <li><a onclick="showPage('shop')" class="nav-donate-btn">Make a Donation</a></li>
     </ul>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -113,77 +227,374 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="shop.html" onclick="closeMenu()">Shop</a>
-  <a href="about.html" onclick="closeMenu()">About</a>
-  <a href="how-it-works.html" onclick="closeMenu()">How It Works</a>
-  <a href="contact.html" onclick="closeMenu()">Contact</a>
-  <a href="privacy-policy.html" onclick="closeMenu()">Privacy Policy</a>
+  <a onclick="showPage('shop');closeMenu()">Shop</a>
+  <a onclick="showPage('about');closeMenu()">About</a>
+  <a onclick="showPage('how');closeMenu()">How It Works</a>
+  <a onclick="showPage('contact');closeMenu()">Contact</a>
+  <a onclick="showPage('privacy');closeMenu()">Privacy Policy</a>
   <a href="https://www.iskconnaperville.org" target="_blank" rel="noopener">Temple Website ↗</a>
-  <a href="shop.html" onclick="closeMenu()" style="color:var(--saffron-light);">Make a Donation →</a>
+  <a onclick="showPage('shop');closeMenu()" style="color:var(--saffron-light);">Make a Donation →</a>
 </div>
 
-  <div class="page-body">
-    <section class="hero">
-      <div class="hero-ring" style="width:380px;height:380px;"></div>
-      <div class="hero-ring" style="width:820px;height:820px;"></div>
-      <div class="hero-content">
-        <img src="data:image/jpeg;base64,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" alt="ISKCON Naperville" class="hero-logo" />
-        <p class="hero-eyebrow">Naperville, Illinois · Est. 1966</p>
-        <h1>Offerings rooted in<br><em>devotion &amp; grace</em></h1>
-        <p class="hero-sub">Every item from our temple shop carries the blessings of our community. Your donation supports the services, programs, and outreach of ISKCON Naperville.</p>
-        <div class="hero-ctas">
-          <a href="shop.html" class="btn-primary">Browse the Shop</a>
-          <a href="about.html" class="btn-outline">About Our Temple</a>
-        </div>
-      </div>
-    </section>
-    <div class="marquee-band" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Hare Krishna</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Hare Krishna</span><span class="dot">◆</span><span>Krishna Krishna</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Rama Rama</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span>
-        <span>Hare Krishna</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Hare Krishna</span><span class="dot">◆</span><span>Krishna Krishna</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Rama Rama</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span>
+<!-- ══════════════════ HOME PAGE ══════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-ring" style="width:380px;height:380px;"></div>
+    <div class="hero-ring" style="width:820px;height:820px;"></div>
+    <div class="hero-content">
+      <img src="{LOGO_SRC}" alt="ISKCON Naperville" class="hero-logo" />
+      <p class="hero-eyebrow">Naperville, Illinois · Est. 1966</p>
+      <h1>Offerings rooted in<br><em>devotion &amp; grace</em></h1>
+      <p class="hero-sub">Every item from our temple shop carries the blessings of our community. Your donation supports the services, programs, and outreach of ISKCON Naperville.</p>
+      <div class="hero-ctas">
+        <a onclick="showPage('shop')" class="btn-primary">Browse the Shop</a>
+        <a onclick="showPage('about')" class="btn-outline">About Our Temple</a>
       </div>
     </div>
-    <section class="features">
-      <div class="container">
-        <p class="section-eyebrow">Welcome</p>
-        <h2 class="section-title">Sacred items, offered with love</h2>
-        <div class="divider"></div>
-        <div class="features-grid">
-          <div class="feature"><div class="feature-icon">📿</div><h4>Authentic Items</h4><p>Every item in our shop comes directly from our temple — books, puja supplies, sacred art, and more.</p></div>
-          <div class="feature"><div class="feature-icon">🙏</div><h4>Donation-Based</h4><p>All items are offered at a fixed donation amount. No sales tax. All proceeds go directly to temple programs.</p></div>
-          <div class="feature"><div class="feature-icon">💛</div><h4>Support the Mission</h4><p>Your generosity helps ISKCON Naperville continue its seva — festivals, outreach, and spiritual education.</p></div>
-          <div class="feature"><div class="feature-icon">🪷</div><h4>Blessed with Devotion</h4><p>Items are prepared and distributed with care, love, and the blessings of our deity, Radha Damodar.</p></div>
+  </section>
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Hare Krishna</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Hare Krishna</span><span class="dot">◆</span><span>Krishna Krishna</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Rama Rama</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span>
+      <span>Hare Krishna</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Hare Krishna</span><span class="dot">◆</span><span>Krishna Krishna</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span><span>Hare Rama</span><span class="dot">◆</span><span>Rama Rama</span><span class="dot">◆</span><span>Hare Hare</span><span class="dot">◆</span>
+    </div>
+  </div>
+  <section class="features">
+    <div class="container">
+      <p class="section-eyebrow">Welcome</p>
+      <h2 class="section-title">Sacred items, offered with love</h2>
+      <div class="divider"></div>
+      <div class="features-grid">
+        <div class="feature"><div class="feature-icon">📿</div><h4>Authentic Items</h4><p>Every item comes directly from our temple — books, puja supplies, sacred art, and more.</p></div>
+        <div class="feature"><div class="feature-icon">🙏</div><h4>Donation-Based</h4><p>All items are offered at a fixed donation amount. No sales tax. All proceeds go directly to temple programs.</p></div>
+        <div class="feature"><div class="feature-icon">💛</div><h4>Support the Mission</h4><p>Your generosity helps ISKCON Naperville continue its seva — festivals, outreach, and spiritual education.</p></div>
+        <div class="feature"><div class="feature-icon">🪷</div><h4>Blessed with Devotion</h4><p>Items are prepared and distributed with care, love, and the blessings of our deity, Radha Damodar.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════ SHOP PAGE ══════════════════ -->
+<div class="page" id="page-shop">
+  <div class="shop-hero">
+    <div class="container">
+      <p class="section-eyebrow">Gift Shop</p>
+      <h1 class="section-title" style="color:var(--gold-pale);">Browse Our Offerings</h1>
+      <p class="section-lead" style="color:rgba(245,233,200,.65);margin:0 auto;">All items are offered at a fixed donation amount. No tax is collected. Your contribution supports the mission of ISKCON Naperville.</p>
+    </div>
+  </div>
+  <section class="shop-section">
+    <div class="container">
+      <div class="filter-row" id="filterRow">
+        <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+        <button class="filter-btn" onclick="filterProducts('books',this)">Books</button>
+        <button class="filter-btn" onclick="filterProducts('puja',this)">Puja Items</button>
+        <button class="filter-btn" onclick="filterProducts('art',this)">Art &amp; Deity</button>
+      </div>
+      <div class="shop-grid" id="shopGrid"></div>
+      <div class="shop-note">
+        <strong>About our donation model:</strong> Items in this shop are offered at a fixed donation amount, consistent with our in-temple shop. This is a voluntary donation to ISKCON Naperville, a registered 501(c)(3) nonprofit religious organization. No sales tax is applied. All proceeds go directly toward temple programs, festivals, and outreach — not for profit. Donations are processed securely through PayPal.
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════ ABOUT PAGE ══════════════════ -->
+<div class="page" id="page-about">
+  <div class="page-hero">
+    <div class="container">
+      <p class="section-eyebrow">Our Temple</p>
+      <h1 class="section-title">About ISKCON Naperville</h1>
+    </div>
+  </div>
+  <section class="about-section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-frame">🪷</div>
+        <div>
+          <p class="section-eyebrow">Who we are</p>
+          <h2 class="section-title">A home for the soul in the heart of Naperville</h2>
+          <div class="divider"></div>
+          <p class="section-lead">ISKCON Naperville — the Radha Damodar Temple — has served the local community since 1966, offering a sanctuary for spiritual practice, education, and celebration of Vedic culture. Founded as part of the International Society for Krishna Consciousness by His Divine Grace A.C. Bhaktivedanta Swami Prabhupada, our temple continues his mission of sharing Krishna consciousness with all.</p>
+          <div class="about-quote"><p>"We have made this shop available online so that everyone — near and far — can access sacred items and support the mission of spreading Krishna consciousness."</p></div>
+          <a href="https://www.iskconnaperville.org" target="_blank" rel="noopener" class="temple-link">Visit the main temple website</a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+  <section class="mission">
+    <div class="container">
+      <p class="section-eyebrow">Our Mission</p>
+      <h2 class="section-title">Serving the community through devotion</h2>
+      <div class="divider"></div>
+      <div class="mission-grid">
+        <div class="mission-card"><h4>Spiritual Education</h4><p>We offer regular classes on Bhagavad Gita, Srimad Bhagavatam, and Vedic philosophy, open to all.</p></div>
+        <div class="mission-card"><h4>Festival Celebrations</h4><p>Janmashtami, Ratha Yatra, Diwali, and many more — our festivals bring the community together in joy.</p></div>
+        <div class="mission-card"><h4>Food Distribution</h4><p>Prasadam distribution is a cornerstone of our service — offering sanctified food to all who visit.</p></div>
+        <div class="mission-card"><h4>Community Outreach</h4><p>We actively engage with the broader Naperville community through events, volunteering, and cultural programs.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════ HOW IT WORKS PAGE ══════════════════ -->
+<div class="page" id="page-how">
+  <div class="page-hero">
+    <div class="container">
+      <p class="section-eyebrow">Process</p>
+      <h1 class="section-title">How It Works</h1>
+    </div>
   </div>
-  
+  <section class="how-section">
+    <div class="container">
+      <p class="section-eyebrow">Simple steps</p>
+      <h2 class="section-title">Simple, sacred, seamless</h2>
+      <div class="divider"></div>
+      <div class="how-grid">
+        <div class="how-step"><div class="how-icon">🪷</div><p class="how-num">Step 01</p><h4>Browse offerings</h4><p>Explore our curated selection of books, puja items, and sacred art from our temple shop.</p></div>
+        <div class="how-step"><div class="how-icon">🙏</div><p class="how-num">Step 02</p><h4>Select an item</h4><p>Each item has a fixed donation amount — no tax, no hidden fees. Click "Donate" on any item.</p></div>
+        <div class="how-step"><div class="how-icon">💛</div><p class="how-num">Step 03</p><h4>Donate via PayPal</h4><p>Your donation is processed securely through PayPal. No PayPal account required — card payments accepted.</p></div>
+        <div class="how-step"><div class="how-icon">📦</div><p class="how-num">Step 04</p><h4>Pickup or contact us</h4><p>Arrange pickup at the temple during open hours, or contact us for shipping arrangements.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="faq">
+    <div class="container">
+      <p class="section-eyebrow">Questions</p>
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="divider"></div>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why is it called a "donation" instead of a purchase?</h4><p>ISKCON Naperville is a registered 501(c)(3) nonprofit religious organization. Consistent with our in-temple shop, all transactions are classified as voluntary donations to the temple. No sales tax is collected, and all proceeds go directly toward temple programs and outreach, not for profit.</p></div>
+        <div class="faq-item"><h4>Is there sales tax?</h4><p>No. Because all transactions are donations to a registered nonprofit religious organization, no Illinois sales tax is applied — consistent with our in-temple shop policy.</p></div>
+        <div class="faq-item"><h4>How do I receive my item?</h4><p>After completing your donation, please contact us via the Contact page or visit the temple during open hours to arrange pickup. We are located at 1505 McDowell Road, Naperville, IL 60563.</p></div>
+        <div class="faq-item"><h4>Is my payment secure?</h4><p>Yes. All donations are processed through PayPal, a trusted and secure payment platform. We never store your payment information.</p></div>
+        <div class="faq-item"><h4>Can I donate more than the listed amount?</h4><p>Absolutely. The amounts listed are fixed donation amounts for each item. If you wish to make an additional offering to the temple, you are always welcome to do so.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════ CONTACT PAGE ══════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-hero">
+    <div class="container">
+      <p class="section-eyebrow">Get in Touch</p>
+      <h1 class="section-title">Contact Us</h1>
+    </div>
+  </div>
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p><strong>Address:</strong> 1505 McDowell Road, Naperville, IL 60563</p>
+          <p><strong>Phone:</strong> 630-608-0209</p>
+          <p><strong>Email:</strong> <a href="mailto:info@iskconnaperville.org">info@iskconnaperville.org</a></p>
+          <div class="hours-block">
+            <h4>Temple hours:</h4>
+            <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;font-weight:500;">Monday to Saturday:</p>
+            <div class="hours-row"><strong>5:00 AM</strong> Mangala arati &amp; Tulasi puja</div>
+            <div class="hours-row"><strong>5:35 AM</strong> Japa</div>
+            <div class="hours-row"><strong>7:15 AM</strong> Sringara arati &amp; Guru puja</div>
+            <div class="hours-row"><strong>7:30 AM</strong> Srimad Bhagavatam class</div>
+            <div class="hours-row"><strong>12:30 PM</strong> Raj bhoga offering &amp; arati</div>
+            <div class="hours-row"><strong>1 PM to 4 PM</strong> Closed</div>
+            <div class="hours-row"><strong>6:00 PM</strong> Sandhya arati</div>
+            <div class="hours-row"><strong>7:30 PM</strong> Sayana arati</div>
+          </div>
+          <div class="hours-block">
+            <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;font-weight:500;">Sunday (Open all day):</p>
+            <div class="hours-row"><strong>5:00 AM</strong> Mangala arati &amp; Tulasi puja</div>
+            <div class="hours-row"><strong>5:35 AM</strong> Japa</div>
+            <div class="hours-row"><strong>7:15 AM</strong> Sringara arati &amp; Guru puja</div>
+            <div class="hours-row"><strong>7:30 AM</strong> Srimad Bhagavatam class</div>
+            <div class="hours-row"><strong>12:30 PM</strong> Raj bhoga offering &amp; arati</div>
+            <div class="hours-row"><strong>5:00 PM</strong> Sandhya arati</div>
+            <div class="hours-row"><strong>7:30 PM</strong> Sayana arati</div>
+          </div>
+          <div class="email-signup">
+            You can register for our email communications <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3Q6K2g3Z5g3Z5g3Z5g3Z5g3Z5g3Z5g3Z5g3Z5g3Z5g3Z5g/viewform" target="_blank" rel="noopener">HERE</a> or use the form below to send us an email. We look forward to hearing from you!
+          </div>
+        </div>
+        <div>
+          <form class="contact-form" onsubmit="handleContact(event)">
+            <div><label>Your Name (required)</label><input type="text" required placeholder="Your name" /></div>
+            <div><label>Your Email (required)</label><input type="email" required placeholder="Your email" /></div>
+            <div><label>Subject</label><input type="text" placeholder="Subject" /></div>
+            <div><label>Your Message</label><textarea placeholder="Your message…"></textarea></div>
+            <button type="submit" class="send-btn">Send Now</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════ PRIVACY PAGE ══════════════════ -->
+<div class="page" id="page-privacy">
+  <div class="page-hero">
+    <div class="container">
+      <p class="section-eyebrow">Legal</p>
+      <h1 class="section-title">Privacy Policy</h1>
+    </div>
+  </div>
+  <section class="privacy-section">
+    <div class="container">
+      <div class="privacy-content">
+        <div class="privacy-note">This Privacy Policy applies to the Hare Krishna Gift Shop online store operated by ISKCON Naperville (Radha Damodar Temple). It is consistent with the privacy policy of our main temple website at <a href="https://www.iskconnaperville.org/privacy-policy" target="_blank" rel="noopener">iskconnaperville.org</a>.</div>
+        <h2>Privacy Policy</h2>
+        <p>ISKCON Naperville (the "Temple") is committed to protecting the privacy of our donors, visitors, and community members. This policy explains how we collect, use, and protect your information when you use this online gift shop.</p>
+        <h2>About Our Donation Model</h2>
+        <p>All transactions on this website are <strong>voluntary donations</strong> to ISKCON Naperville, a registered 501(c)(3) nonprofit religious organization. Items listed in this shop have a fixed donation amount. This model is consistent with our in-temple shop. <strong>No sales tax is collected</strong>, as these are donations to a nonprofit religious organization and not commercial sales. All proceeds go directly toward temple programs, outreach, and spiritual services — not for profit.</p>
+        <h2>Information We Collect</h2>
+        <p>When you make a donation through this site, your payment is processed by PayPal. We may receive:</p>
+        <ul><li>Your name and email address (as provided to PayPal)</li><li>The amount and purpose of your donation</li><li>Contact information you submit through our contact form</li></ul>
+        <p>We do not store your credit card or payment information. All payment processing is handled securely by PayPal.</p>
+        <h2>How We Use Your Information</h2>
+        <p>Information collected is used solely to:</p>
+        <ul><li>Process and acknowledge your donation</li><li>Coordinate item pickup or delivery</li><li>Send donation receipts or acknowledgments</li><li>Respond to your inquiries</li><li>Send temple newsletters or updates, if you have opted in</li></ul>
+        <p>We do not sell, trade, or rent your personal information to third parties.</p>
+        <h2>Donor Privacy</h2>
+        <p>ISKCON Naperville respects the privacy of our donors. Donor information is kept confidential and is not shared with outside organizations except as required by law or as necessary to process your donation. We will not publish donor names without explicit permission.</p>
+        <h2>Email Communications</h2>
+        <p>If you register for our email communications, you may receive updates about temple events, programs, and news. You may unsubscribe at any time by contacting us at <a href="mailto:info@iskconnaperville.org">info@iskconnaperville.org</a>.</p>
+        <h2>Cookies and Tracking</h2>
+        <p>This website does not use tracking cookies or analytics. PayPal may use cookies in the course of processing your donation; please refer to <a href="https://www.paypal.com/us/legalhub/privacy-full" target="_blank" rel="noopener">PayPal's Privacy Policy</a> for details.</p>
+        <h2>Data Security</h2>
+        <p>We take reasonable precautions to protect your information. No method of transmission over the internet is 100% secure. We encourage caution when submitting personal information online.</p>
+        <h2>Contact Us</h2>
+        <p>If you have questions about this Privacy Policy, please contact us:</p>
+        <ul><li><strong>Address:</strong> 1505 McDowell Road, Naperville, IL 60563</li><li><strong>Phone:</strong> 630-608-0209</li><li><strong>Email:</strong> <a href="mailto:info@iskconnaperville.org">info@iskconnaperville.org</a></li></ul>
+        <p style="margin-top:32px;font-size:.8rem;color:var(--text-muted);">Last updated: June 2025 · ISKCON Naperville — Radha Damodar Temple</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
 <footer>
   <div class="container">
     <div class="footer-inner">
-      <div class="footer-logo">
-        <img src="data:image/jpeg;base64,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" alt="ISKCON Naperville" />
+      <div class="footer-logo" onclick="showPage('home')">
+        <img src="{LOGO_SRC}" alt="ISKCON Naperville" />
         <span>Hare Krishna Gift Shop</span>
       </div>
-      <p class="footer-copy">
-        © 2025 ISKCON Naperville · All donations support temple programs &amp; outreach<br>
-        <a href="https://www.iskconnaperville.org" target="_blank" rel="noopener">iskconnaperville.org</a>
-      </p>
+      <p class="footer-copy">© 2025 ISKCON Naperville · All donations support temple programs &amp; outreach<br><a href="https://www.iskconnaperville.org" target="_blank" rel="noopener">iskconnaperville.org</a></p>
       <ul class="footer-links">
-        <li><a href="shop.html">Shop</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a onclick="showPage('shop')">Shop</a></li>
+        <li><a onclick="showPage('about')">About</a></li>
+        <li><a onclick="showPage('contact')">Contact</a></li>
+        <li><a onclick="showPage('privacy')">Privacy Policy</a></li>
       </ul>
     </div>
   </div>
 </footer>
 
-  
-<script>
-  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
-  function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
-</script>
+<!-- DONATION MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>Make a Donation</h3>
+    <p class="modal-item-name" id="modalItemName"></p>
+    <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">This is a voluntary donation to ISKCON Naperville. No tax is collected.</p>
+    <div class="modal-fixed-amount" id="modalAmount"></div>
+    <p class="modal-amount-label">Fixed donation amount · No tax</p>
+    <button class="modal-paypal-btn" onclick="goToPayPal()">
+      <svg height="20" viewBox="0 0 101 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12.237 2.8H5.6C5.137 2.8 4.74 3.126 4.67 3.583L2.03 20.171c-.05.336.207.636.547.636h3.18c.463 0 .861-.326.93-.783l.628-3.978a.94.94 0 0 1 .93-.783h2.1c4.363 0 6.882-2.11 7.542-6.297.296-1.83.012-3.267-.84-4.274C16.1 3.408 14.418 2.8 12.237 2.8zm.764 6.206c-.362 2.374-2.178 2.374-3.934 2.374h-1l .7-4.428a.563.563 0 0 1 .557-.476h.458c1.196 0 2.326 0 2.908.681.35.407.455 1.01.311 1.849z"/><path d="M31.75 8.945h-3.191a.562.562 0 0 0-.556.476l-.144.908-.228-.33c-.705-1.023-2.276-1.365-3.845-1.365-3.597 0-6.669 2.725-7.27 6.546-.312 1.906.131 3.729 1.217 5.003.995 1.168 2.416 1.655 4.11 1.655 2.9 0 4.509-1.863 4.509-1.863l-.145.9c-.05.337.207.637.547.637h2.875c.463 0 .86-.326.93-.783l1.725-10.933c.051-.337-.206-.637-.534-.651zm-4.447 6.33c-.314 1.858-1.793 3.105-3.672 3.105-.943 0-1.699-.303-2.183-.876-.481-.57-.663-1.382-.51-2.286.294-1.84 1.797-3.126 3.648-3.126.924 0 1.675.306 2.168.884.494.583.691 1.401.549 2.299z"/></svg>
+      Donate with PayPal
+    </button>
+    <p class="modal-disclaimer">Voluntary donation · No sales tax · Processed securely by PayPal<br>ISKCON Naperville is a 501(c)(3) nonprofit organization</p>
+  </div>
+</div>
 
+<script>
+  const products = [
+    {{id:1,name:'Bhagavad Gita As It Is',category:'books',emoji:'📖',desc:"A.C. Bhaktivedanta Swami Prabhupada's complete translation and commentary.",price:15,badge:'Popular'}},
+    {{id:2,name:'Srimad Bhagavatam (Single Volume)',category:'books',emoji:'📚',desc:'The ripened fruit of the Vedic literature — a single volume edition.',price:20}},
+    {{id:3,name:'Nectar of Devotion',category:'books',emoji:'📘',desc:"Srila Prabhupada's summary study of Bhakti-rasamrita-sindhu by Rupa Goswami.",price:12}},
+    {{id:4,name:'Krishna Book',category:'books',emoji:'📙',desc:'A summary study of the Tenth Canto of Srimad Bhagavatam.',price:12}},
+    {{id:5,name:'Incense & Agarbatti',category:'puja',emoji:'🪷',desc:'Fragrant incense for daily puja and meditation, hand-rolled with natural ingredients.',price:8}},
+    {{id:6,name:'Tulasi Mala',category:'puja',emoji:'📿',desc:'Sacred tulasi wood japa mala for chanting the Hare Krishna mantra — 108 beads.',price:12}},
+    {{id:7,name:'Chandan & Kumkum Set',category:'puja',emoji:'✨',desc:'Sandalwood paste and kumkum for tilak and worship of the deity.',price:10}},
+    {{id:8,name:'Deity Murti — Radha Krishna',category:'art',emoji:'🌼',desc:'Hand-painted brass deity murti of Radha and Krishna, ideal for home altar.',price:40}},
+    {{id:9,name:'Krishna Painting Print',category:'art',emoji:'🎨',desc:'Beautiful art print of Lord Krishna, suitable for framing and home altar.',price:15}},
+  ];
+
+  let currentProduct = null;
+
+  function showPage(name) {{
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + name);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo(0, 0);
+    if (name === 'shop') renderProducts('all');
+  }}
+
+  function renderProducts(filter) {{
+    const grid = document.getElementById('shopGrid');
+    const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    const catLabel = {{books:'Books', puja:'Puja Items', art:'Art & Deity'}};
+    grid.innerHTML = filtered.map(p => `
+      <div class="product-card" onclick="openModal(${{p.id}})">
+        <div class="product-img">
+          <span role="img" aria-label="${{p.name}}">${{p.emoji}}</span>
+          ${{p.badge ? `<span class="product-badge">${{p.badge}}</span>` : ''}}
+        </div>
+        <div class="product-info">
+          <p class="product-category">${{catLabel[p.category] || p.category}}</p>
+          <h3 class="product-name">${{p.name}}</h3>
+          <p class="product-desc">${{p.desc}}</p>
+          <div class="product-footer">
+            <div class="product-donation">$${{p.price}}<em>Donation amount</em></div>
+            <button class="donate-btn" onclick="event.stopPropagation();openModal(${{p.id}})">Donate</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }}
+
+  function filterProducts(cat, btn) {{
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts(cat);
+  }}
+
+  function openModal(id) {{
+    currentProduct = products.find(p => p.id === id);
+    document.getElementById('modalItemName').textContent = currentProduct.name;
+    document.getElementById('modalAmount').textContent = '$' + currentProduct.price;
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }}
+
+  function closeModal() {{
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }}
+
+  function goToPayPal() {{
+    const url = `https://www.paypal.com/donate/?business=YOUR_PAYPAL_EMAIL&amount=${{currentProduct.price}}&currency_code=USD&item_name=${{encodeURIComponent('Donation - ' + currentProduct.name + ' - ISKCON Naperville')}}`;
+    window.open(url, '_blank');
+    closeModal();
+  }}
+
+  function handleContact(e) {{
+    e.preventDefault();
+    e.target.innerHTML = '<p style="text-align:center;padding:40px;color:var(--saffron);font-family:var(--font-serif);font-size:1.2rem;font-style:italic;">Thank you — we will be in touch soon. 🙏</p>';
+  }}
+
+  function toggleMenu() {{ document.getElementById('mobileMenu').classList.toggle('open'); }}
+  function closeMenu() {{ document.getElementById('mobileMenu').classList.remove('open'); }}
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {{
+    if (e.target === this) closeModal();
+  }});
+
+  renderProducts('all');
+</script>
 </body>
-</html>
+</html>"""
+
+with open('/mnt/user-data/outputs/index.html', 'w') as f:
+    f.write(html)
+print("Single index.html done — size:", len(html), "chars")
+PYEOF
