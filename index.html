@@ -333,6 +333,9 @@
           <!-- category buttons injected by JS -->
         </aside>
         <div>
+          <div id="inventoryStatus" style="display:none;background:#fdf3e7;border:1px solid var(--border);border-left:3px solid var(--saffron-light);border-radius:2px;padding:12px 16px;font-size:.8rem;color:var(--earth-mid);margin-bottom:18px;">
+            Showing saved inventory — live data from the inventory sheet couldn't be reached just now.
+          </div>
           <input type="text" class="shop-search" id="shopSearch" placeholder="Search items…" oninput="renderProducts()" />
           <div class="results-bar">
             <p class="results-count" id="resultsCount"></p>
@@ -603,7 +606,7 @@
 </div>
 
 <script>
-  const products = [
+  const FALLBACK_PRODUCTS = [
     {id:1,name:'Girls Fancy Dress',category:'Clothing & Apparel',emoji:'👗',desc:'Festive fancy dress for girls, ideal for temple visits and celebrations.',price:34.99,qty:23},
     {id:2,name:'Boys Kurta (Pajama Included)',category:'Clothing & Apparel',emoji:'👕',desc:'Traditional kurta and pajama set for boys.',price:29.99,qty:7},
     {id:3,name:'Fancy Kurta (Pajamas Included)',category:'Clothing & Apparel',emoji:'👔',desc:'Elevated kurta and pajama set for special occasions.',price:39.99,qty:2},
@@ -630,6 +633,110 @@
     {id:24,name:'Cow Ghee 1 Gal',category:'Food & Ghee',emoji:'🫙',desc:'Pure cow ghee, 1 gallon, for offerings and cooking.',price:107.99,qty:16},
     {id:25,name:'Room Freshener',category:'Temple & Home Fragrances',emoji:'🌸',desc:'Fragrance for temple and home, inspired by puja incense.',price:null,qty:36},
   ];
+
+  // ── LIVE GOOGLE SHEETS INTEGRATION ──────────────────────────────────
+  // The shop pulls live inventory (Category, Name, Quantity, Price) from
+  // this published Google Sheet on every page load. If the fetch fails
+  // for any reason (offline, sheet unshared, etc.), the FALLBACK_PRODUCTS
+  // array above is used instead so the shop never shows blank.
+  const SHEET_ID = '1FEBUMK0zmjje_C0m6syjdyNUA31tnMvBiIVPkn-IIck';
+  const SHEET_GID = '408881083';
+  const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+
+  let products = FALLBACK_PRODUCTS;
+  let usingFallback = false;
+
+  // category → emoji, used since the sheet doesn't include an icon column
+  const CATEGORY_EMOJI = {
+    'Clothing & Apparel': '👕',
+    'Deity Worship & Accessories': '✨',
+    'Puja Essentials': '🕯️',
+    'Food & Ghee': '🫙',
+    'Temple & Home Fragrances': '🌸',
+  };
+
+  function parseCSV(text) {
+    // Minimal CSV parser that handles quoted fields with commas inside them,
+    // which Google's CSV export uses for any field containing a comma.
+    const rows = [];
+    let row = [], field = '', inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i], next = text[i + 1];
+      if (inQuotes) {
+        if (c === '"' && next === '"') { field += '"'; i++; }
+        else if (c === '"') { inQuotes = false; }
+        else { field += c; }
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\n' || c === '\r') {
+          if (field !== '' || row.length) { row.push(field); rows.push(row); row = []; field = ''; }
+          if (c === '\r' && next === '\n') i++;
+        } else field += c;
+      }
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  function sheetRowsToProducts(rows) {
+    if (!rows.length) return [];
+    const header = rows[0].map(h => h.trim().toLowerCase());
+    const idxCategory = header.indexOf('category');
+    const idxName = header.indexOf('name');
+    const idxQty = header.indexOf('quantity');
+    const idxPrice = header.indexOf('price');
+    if (idxCategory === -1 || idxName === -1) return [];
+
+    return rows.slice(1).filter(r => r[idxName] && r[idxName].trim()).map((r, i) => {
+      const category = (r[idxCategory] || 'Other').trim();
+      const name = r[idxName].trim();
+      const qtyRaw = idxQty !== -1 ? (r[idxQty] || '').trim() : '';
+      const priceRaw = idxPrice !== -1 ? (r[idxPrice] || '').trim() : '';
+      const qty = parseInt(qtyRaw.replace(/[^0-9]/g, ''), 10);
+      const priceNum = parseFloat(priceRaw.replace(/[^0-9.]/g, ''));
+      return {
+        id: i + 1,
+        name,
+        category,
+        emoji: CATEGORY_EMOJI[category] || '🪔',
+        desc: `${name} — available from ISKCON Naperville's gift shop.`,
+        price: (priceRaw && !isNaN(priceNum)) ? priceNum : null,
+        qty: isNaN(qty) ? 0 : qty,
+      };
+    });
+  }
+
+  async function loadProductsFromSheet() {
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error('Sheet fetch failed: ' + res.status);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      const parsed = sheetRowsToProducts(rows);
+      if (!parsed.length) throw new Error('Sheet returned no usable rows');
+      products = parsed;
+      usingFallback = false;
+    } catch (err) {
+      console.warn('Live inventory fetch failed, using fallback data:', err);
+      products = FALLBACK_PRODUCTS;
+      usingFallback = true;
+    }
+    rebuildCategoryList();
+    renderSidebar();
+    renderProducts();
+    const banner = document.getElementById('inventoryStatus');
+    if (banner) {
+      banner.style.display = usingFallback ? 'block' : 'none';
+    }
+  }
+
+  function rebuildCategoryList() {
+    const seen = [];
+    products.forEach(p => { if (!seen.includes(p.category)) seen.push(p.category); });
+    categories.length = 0;
+    seen.forEach(c => categories.push(c));
+  }
 
   const categories = ['Clothing & Apparel','Deity Worship & Accessories','Puja Essentials','Food & Ghee','Temple & Home Fragrances'];
 
@@ -830,6 +937,7 @@
 
   renderSidebar();
   renderProducts();
+  loadProductsFromSheet();
 </script>
 </body>
 </html>
