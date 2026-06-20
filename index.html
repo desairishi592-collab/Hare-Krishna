@@ -143,7 +143,7 @@
     /* MODAL */
     .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(44,30,15,.6);backdrop-filter:blur(4px);place-items:center;}
     .modal-overlay.open{display:grid;}
-    .modal{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:40px;max-width:460px;width:calc(100% - 40px);position:relative;}
+    .modal{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:40px;max-width:460px;width:calc(100% - 40px);position:relative;max-height:calc(100vh - 48px);overflow-y:auto;}
     .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--text-muted);line-height:1;}
     .modal h3{font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:var(--earth);margin-bottom:6px;}
     .modal-item-name{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--saffron);margin-bottom:20px;}
@@ -152,6 +152,20 @@
     .modal-paypal-btn{width:100%;background:#003087;color:var(--white);border:none;border-radius:4px;padding:14px;font-size:.95rem;font-weight:500;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
     .modal-paypal-btn:hover{background:#001f5c;}
     .modal-disclaimer{margin-top:16px;font-size:.75rem;color:var(--text-muted);text-align:center;line-height:1.6;}
+    .modal-screen{animation:fadeIn .2s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+    .order-field{margin-bottom:14px;}
+    .order-field label{display:block;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px;font-weight:400;}
+    .order-field input{width:100%;border:1px solid var(--border);background:var(--white);color:var(--text);font-family:var(--font-sans);font-size:.88rem;font-weight:300;padding:10px 13px;border-radius:2px;outline:none;transition:border-color .2s;}
+    .order-field input:focus{border-color:var(--saffron);}
+    .order-field-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;}
+    .order-radio-row{display:flex;gap:18px;margin-top:4px;}
+    .order-radio{display:flex;align-items:center;gap:7px;font-size:.85rem;color:var(--text);cursor:pointer;font-weight:300;}
+    .order-radio input{accent-color:var(--saffron);width:15px;height:15px;cursor:pointer;}
+    .order-error{color:#b8483a;font-size:.78rem;margin:-4px 0 12px;min-height:1em;}
+    .order-btn-row{display:flex;gap:12px;align-items:stretch;}
+    .order-btn-row .btn-outline{padding:14px 20px;border-color:var(--border);color:var(--text-muted);}
+    .order-btn-row .btn-outline:hover{border-color:var(--saffron);color:var(--saffron);}
 
     /* ABOUT */
     .about-section{padding:80px 0;background:var(--white);}
@@ -527,16 +541,64 @@
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>Make a Donation</h3>
-    <p class="modal-item-name" id="modalItemName"></p>
-    <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">This is a voluntary donation to ISKCON Naperville. No tax is collected.</p>
-    <div class="modal-fixed-amount" id="modalAmount"></div>
-    <p class="modal-amount-label">Fixed donation amount · No tax</p>
-    <button class="modal-paypal-btn" onclick="goToPayPal()">
-      <svg height="20" viewBox="0 0 101 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12.237 2.8H5.6C5.137 2.8 4.74 3.126 4.67 3.583L2.03 20.171c-.05.336.207.636.547.636h3.18c.463 0 .861-.326.93-.783l.628-3.978a.94.94 0 0 1 .93-.783h2.1c4.363 0 6.882-2.11 7.542-6.297.296-1.83.012-3.267-.84-4.274C16.1 3.408 14.418 2.8 12.237 2.8zm.764 6.206c-.362 2.374-2.178 2.374-3.934 2.374h-1l .7-4.428a.563.563 0 0 1 .557-.476h.458c1.196 0 2.326 0 2.908.681.35.407.455 1.01.311 1.849z"/><path d="M31.75 8.945h-3.191a.562.562 0 0 0-.556.476l-.144.908-.228-.33c-.705-1.023-2.276-1.365-3.845-1.365-3.597 0-6.669 2.725-7.27 6.546-.312 1.906.131 3.729 1.217 5.003.995 1.168 2.416 1.655 4.11 1.655 2.9 0 4.509-1.863 4.509-1.863l-.145.9c-.05.337.207.637.547.637h2.875c.463 0 .86-.326.93-.783l1.725-10.933c.051-.337-.206-.637-.534-.651zm-4.447 6.33c-.314 1.858-1.793 3.105-3.672 3.105-.943 0-1.699-.303-2.183-.876-.481-.57-.663-1.382-.51-2.286.294-1.84 1.797-3.126 3.648-3.126.924 0 1.675.306 2.168.884.494.583.691 1.401.549 2.299z"/></svg>
-      Donate with PayPal
-    </button>
-    <p class="modal-disclaimer">Voluntary donation · No sales tax · Processed securely by PayPal<br>ISKCON Naperville is a 501(c)(3) nonprofit organization</p>
+
+    <!-- SCREEN 1: item summary -->
+    <div class="modal-screen" id="modalScreen1">
+      <h3>Make a Donation</h3>
+      <p class="modal-item-name" id="modalItemName"></p>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">This is a voluntary donation to ISKCON Naperville. No tax is collected.</p>
+      <div class="modal-fixed-amount" id="modalAmount"></div>
+      <p class="modal-amount-label" id="modalAmountLabel">Fixed donation amount · No tax</p>
+      <button class="modal-paypal-btn" id="modalContinueBtn" onclick="goToOrderStep()">Continue</button>
+      <p class="modal-disclaimer">Voluntary donation · No sales tax · Processed securely by PayPal<br>ISKCON Naperville is a 501(c)(3) nonprofit organization</p>
+    </div>
+
+    <!-- SCREEN 2: order details -->
+    <div class="modal-screen" id="modalScreen2" style="display:none;">
+      <h3>Delivery Details</h3>
+      <p class="modal-item-name" id="modalItemName2"></p>
+      <div class="order-field">
+        <label for="orderName">Your Name</label>
+        <input type="text" id="orderName" placeholder="Full name" />
+      </div>
+      <div class="order-field">
+        <label>Delivery Preference</label>
+        <div class="order-radio-row">
+          <label class="order-radio"><input type="radio" name="delivery" value="pickup" checked onchange="toggleAddressFields()" /> Pickup at Temple</label>
+          <label class="order-radio"><input type="radio" name="delivery" value="mail" onchange="toggleAddressFields()" /> Mail to Address</label>
+        </div>
+      </div>
+      <div id="addressFields" style="display:none;">
+        <div class="order-field">
+          <label for="orderAddress">Street Address</label>
+          <input type="text" id="orderAddress" placeholder="123 Main St" />
+        </div>
+        <div class="order-field-row">
+          <div class="order-field">
+            <label for="orderCity">City</label>
+            <input type="text" id="orderCity" placeholder="Naperville" />
+          </div>
+          <div class="order-field">
+            <label for="orderState">State</label>
+            <input type="text" id="orderState" placeholder="IL" maxlength="2" />
+          </div>
+          <div class="order-field">
+            <label for="orderZip">ZIP</label>
+            <input type="text" id="orderZip" placeholder="60563" />
+          </div>
+        </div>
+      </div>
+      <p class="order-error" id="orderError"></p>
+      <div class="order-btn-row">
+        <button class="btn-outline" style="flex:0;" onclick="backToSummary()">Back</button>
+        <button class="modal-paypal-btn" style="flex:1;margin-top:0;" onclick="goToPayPal()">
+          <svg height="18" viewBox="0 0 101 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12.237 2.8H5.6C5.137 2.8 4.74 3.126 4.67 3.583L2.03 20.171c-.05.336.207.636.547.636h3.18c.463 0 .861-.326.93-.783l.628-3.978a.94.94 0 0 1 .93-.783h2.1c4.363 0 6.882-2.11 7.542-6.297.296-1.83.012-3.267-.84-4.274C16.1 3.408 14.418 2.8 12.237 2.8zm.764 6.206c-.362 2.374-2.178 2.374-3.934 2.374h-1l .7-4.428a.563.563 0 0 1 .557-.476h.458c1.196 0 2.326 0 2.908.681.35.407.455 1.01.311 1.849z"/><path d="M31.75 8.945h-3.191a.562.562 0 0 0-.556.476l-.144.908-.228-.33c-.705-1.023-2.276-1.365-3.845-1.365-3.597 0-6.669 2.725-7.27 6.546-.312 1.906.131 3.729 1.217 5.003.995 1.168 2.416 1.655 4.11 1.655 2.9 0 4.509-1.863 4.509-1.863l-.145.9c-.05.337.207.637.547.637h2.875c.463 0 .86-.326.93-.783l1.725-10.933c.051-.337-.206-.637-.534-.651zm-4.447 6.33c-.314 1.858-1.793 3.105-3.672 3.105-.943 0-1.699-.303-2.183-.876-.481-.57-.663-1.382-.51-2.286.294-1.84 1.797-3.126 3.648-3.126.924 0 1.675.306 2.168.884.494.583.691 1.401.549 2.299z"/></svg>
+          Continue to PayPal
+        </button>
+      </div>
+      <p class="modal-disclaimer">Your name and delivery details are recorded for fulfillment only — never shared or sold.</p>
+    </div>
+
   </div>
 </div>
 
@@ -649,18 +711,50 @@
     currentProduct = products.find(p => p.id === id);
     const hasPrice = currentProduct.price !== null && currentProduct.price !== undefined;
     document.getElementById('modalItemName').textContent = currentProduct.name;
+    document.getElementById('modalItemName2').textContent = currentProduct.name;
     document.getElementById('modalAmount').textContent = hasPrice ? '$' + currentProduct.price.toFixed(2) : 'Amount TBD';
-    const payBtn = document.querySelector('.modal-paypal-btn');
-    const amountLabel = document.querySelector('.modal-amount-label');
+    const continueBtn = document.getElementById('modalContinueBtn');
+    const amountLabel = document.getElementById('modalAmountLabel');
     if (hasPrice) {
       amountLabel.textContent = 'Fixed donation amount · No tax';
-      payBtn.style.display = 'flex';
+      continueBtn.style.display = 'block';
+      continueBtn.textContent = 'Continue';
     } else {
       amountLabel.textContent = 'Donation amount not yet set — contact us to arrange';
-      payBtn.style.display = 'none';
+      continueBtn.style.display = 'none';
     }
+
+    // reset order form state every time the modal opens
+    document.getElementById('orderName').value = '';
+    document.getElementById('orderAddress').value = '';
+    document.getElementById('orderCity').value = '';
+    document.getElementById('orderState').value = '';
+    document.getElementById('orderZip').value = '';
+    document.getElementById('orderError').textContent = '';
+    document.querySelector('input[name="delivery"][value="pickup"]').checked = true;
+    toggleAddressFields();
+    showModalScreen(1);
+
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+
+  function showModalScreen(n) {
+    document.getElementById('modalScreen1').style.display = n === 1 ? 'block' : 'none';
+    document.getElementById('modalScreen2').style.display = n === 2 ? 'block' : 'none';
+  }
+
+  function goToOrderStep() {
+    showModalScreen(2);
+  }
+
+  function backToSummary() {
+    showModalScreen(1);
+  }
+
+  function toggleAddressFields() {
+    const isMail = document.querySelector('input[name="delivery"]:checked').value === 'mail';
+    document.getElementById('addressFields').style.display = isMail ? 'block' : 'none';
   }
 
   function closeModal() {
@@ -668,8 +762,55 @@
     document.body.style.overflow = '';
   }
 
+  function validateOrderForm() {
+    const name = document.getElementById('orderName').value.trim();
+    const delivery = document.querySelector('input[name="delivery"]:checked').value;
+    const errorEl = document.getElementById('orderError');
+
+    if (!name) {
+      errorEl.textContent = 'Please enter your name.';
+      return null;
+    }
+    let address = null;
+    if (delivery === 'mail') {
+      const street = document.getElementById('orderAddress').value.trim();
+      const city = document.getElementById('orderCity').value.trim();
+      const state = document.getElementById('orderState').value.trim();
+      const zip = document.getElementById('orderZip').value.trim();
+      if (!street || !city || !state || !zip) {
+        errorEl.textContent = 'Please fill in the full mailing address.';
+        return null;
+      }
+      address = { street, city, state, zip };
+    }
+    errorEl.textContent = '';
+    return { name, delivery, address };
+  }
+
+  function logOrder(order) {
+    // Temporary order log, kept in-browser until the Google Apps Script
+    // write-back to the inventory sheet is built. Stored so today's orders
+    // aren't lost — visible via console for now.
+    const entry = {
+      timestamp: new Date().toISOString(),
+      item: currentProduct.name,
+      category: currentProduct.category,
+      amount: currentProduct.price,
+      ...order
+    };
+    const existing = JSON.parse(sessionStorage.getItem('pendingOrders') || '[]');
+    existing.push(entry);
+    sessionStorage.setItem('pendingOrders', JSON.stringify(existing));
+    console.log('Order captured (temporary local log):', entry);
+  }
+
   function goToPayPal() {
     if (currentProduct.price === null || currentProduct.price === undefined) return;
+    const order = validateOrderForm();
+    if (!order) return;
+
+    logOrder(order);
+
     const url = `https://www.paypal.com/donate/?business=YOUR_PAYPAL_EMAIL&amount=${currentProduct.price}&currency_code=USD&item_name=${encodeURIComponent('Donation - ' + currentProduct.name + ' - ISKCON Naperville')}`;
     window.open(url, '_blank');
     closeModal();
